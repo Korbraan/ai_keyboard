@@ -1,3 +1,5 @@
+package tools;
+
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class DataParser {
 
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();s
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
