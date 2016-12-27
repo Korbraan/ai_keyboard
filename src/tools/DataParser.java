@@ -1,5 +1,7 @@
 package tools;
 
+import model.OccurencesData;
+
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -9,15 +11,15 @@ import java.util.ArrayList;
  */
 public class DataParser {
     private File data_file;
-    private long[][] occurences;
+    private OccurencesData occurences_data;
 
     public DataParser(String data_file_path) {
         this.data_file = new File(data_file_path);
-        this.occurences = new long[26][26];
     }
 
     public void ParseData() {
         try {
+            long[][] occurences = new long[26][26];
             BufferedReader br = new BufferedReader(new FileReader(data_file));
             String line = "";
             // For each line in the file, we process the data
@@ -31,8 +33,8 @@ public class DataParser {
                     }
                     j++;
                 }
-
             }
+            this.occurences_data = new OccurencesData(occurences);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -40,8 +42,8 @@ public class DataParser {
         }
     }
 
-    public long[][] getOccurences() {
-        return occurences;
+    public OccurencesData getOccurencesData() {
+        return occurences_data;
     }
 
 }

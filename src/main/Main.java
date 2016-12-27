@@ -1,6 +1,7 @@
 package main;
 
 import model.Keyboard;
+import model.OccurencesData;
 import tools.DataParser;
 
 /**
@@ -18,7 +19,7 @@ public class Main {
 
         data_parser.ParseData();
 
-        long[][] occurences = data_parser.getOccurences();
+        OccurencesData occurences = data_parser.getOccurencesData();
 
         /*for(int i = 0; i<occurences.length;i++){
             System.out.println("Tableau d'occurences sauvegardé");
