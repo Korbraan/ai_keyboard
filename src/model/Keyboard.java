@@ -21,18 +21,15 @@ public class Keyboard {
     public void createRandomKeyboard() {
 
         Letter[] possibleValues = Letter.class.getEnumConstants();
-        ArrayList<Letter> possibleValuesList = new ArrayList<Letter>(Arrays.asList(possibleValues));
 
-        for(int i=0; i<26; i++) {
+        for(int i = 0; i < 26; i++) {
             int line = ThreadLocalRandom.current().nextInt(4);
             int column = ThreadLocalRandom.current().nextInt(10);
 
             if(this.keys[line][column] == null) {
-                int index = ThreadLocalRandom.current().nextInt(possibleValuesList.size());
-                Letter letter = possibleValuesList.get(index);
+                Letter letter = possibleValues[i];
                 //Add the letter to the keyboard
-                this.setKey(letter,line,column);
-                possibleValuesList.remove(index);
+                this.setKey(letter, line, column);
             } else{
                 i--;
             }
