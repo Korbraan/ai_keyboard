@@ -21,15 +21,18 @@ public class Keyboard {
         Letter[] possibleValues = Letter.class.getEnumConstants();
 
         for(int i = 0; i < 26; i++) {
-            int line = ThreadLocalRandom.current().nextInt(4);
-            int column = ThreadLocalRandom.current().nextInt(10);
+            boolean placed = false;
 
-            if(this.keys[line][column] == null) {
-                Letter letter = possibleValues[i];
-                //Add the letter to the keyboard
-                this.setKey(letter, line, column);
-            } else{
-                i--;
+            while (!placed) {
+                int line = ThreadLocalRandom.current().nextInt(4);
+                int column = ThreadLocalRandom.current().nextInt(10);
+
+                if(this.keys[line][column] == null) {
+                    Letter letter = possibleValues[i];
+                    //Add the letter to the keyboard
+                    this.setKey(letter, line, column);
+                    placed = true;
+                }
             }
         }
     }
