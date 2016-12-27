@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -57,13 +55,16 @@ public class Keyboard {
 
     public String toString() {
         String res ="";
-        for(int i=0; i<keys.length; i++) {
+        for(int i=0; i < keys.length; i++) {
             res+="\n";
-            for(int j=0; j<keys[i].length; j++) {
-                if(keys[i][j]==null) {
+            for(int j=0; j < keys[i].length; j++) {
+                Letter current_key = keys[i][j];
+                if(current_key == null) {
                     res+="  ";
+                } else if (current_key.getValue() < 10) {
+                    res += current_key.getValue() + " ";
                 } else {
-                    res+=keys[i][j].getValue();
+                    res += current_key.getValue();
                 }
                 res+="|";
             }
