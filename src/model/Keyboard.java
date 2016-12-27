@@ -9,18 +9,18 @@ import java.util.Random;
  */
 public class Keyboard {
 
-    private Alphabet[][] keys;
-    private HashMap<Alphabet, Position> keyPos;
+    private Letter[][] keys;
+    private HashMap<Letter, Position> keyPos;
 
     public Keyboard(){
-        this.keys= new Alphabet[4][10];
-        this.keyPos= new HashMap<Alphabet, Position>();
+        this.keys= new Letter[4][10];
+        this.keyPos= new HashMap<Letter, Position>();
     }
 
     public void createRandomKeyboard(){
 
-        Alphabet[] possibleValues = Alphabet.class.getEnumConstants();
-        ArrayList<Alphabet> possibleValuesList = new ArrayList<Alphabet>();
+        Letter[] possibleValues = Letter.class.getEnumConstants();
+        ArrayList<Letter> possibleValuesList = new ArrayList<Letter>();
         for(int i = 0; i<possibleValues.length; i++){
             possibleValuesList.add(possibleValues[i]);
         }
@@ -34,7 +34,7 @@ public class Keyboard {
             if(this.keys[line][column] == null){
                 Random r3 = new Random();
                 int index = r3.nextInt(possibleValuesList.size());
-                Alphabet letter = possibleValuesList.get(index);
+                Letter letter = possibleValuesList.get(index);
                 //Add the letter to the keyboard
                 this.setKey(letter,line,column);
                 possibleValuesList.remove(index);
@@ -44,10 +44,10 @@ public class Keyboard {
         }
     }
 
-    public Alphabet[][] getKeyboard(){
+    public Letter[][] getKeyboard(){
         return this.keys;
     }
-    public Position getPosByKey(Alphabet al){
+    public Position getPosByKey(Letter al){
         return keyPos.get(al);
     }
 
@@ -57,7 +57,7 @@ public class Keyboard {
      * @param x
      * @param y
      */
-    public void setKey(Alphabet al, int x, int y){
+    public void setKey(Letter al, int x, int y){
         keys[x][y]=al;
         //System.out.println(keys[x][y].getValue());
         keyPos.put(al, new Position(x,y));
