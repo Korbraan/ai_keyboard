@@ -2,7 +2,10 @@ package main;
 
 import model.Keyboard;
 import model.OccurencesData;
+import model.Position;
 import tools.DataParser;
+
+import java.util.ArrayList;
 
 /**
  * Created by cremond on 17/12/16.
@@ -19,15 +22,20 @@ public class Main {
 
         data_parser.ParseData();
 
-        OccurencesData occurences = data_parser.getOccurencesData();
+        OccurencesData occurences_data = data_parser.getOccurencesData();
 
-        /*for(int i = 0; i<occurences.length;i++){
-            System.out.println("Tableau d'occurences sauvegardé");
-            System.out.println("---------------------------------------");
-            for(int j = 0; j<occurences.length;j++){
-                System.out.print(occurences[i][j]+ " ");
-            }
-        }*/
+        /*
+        System.out.println("Occurences importées");
+        System.out.println(occurences.toString());
+        */
+
+        ArrayList<Position> max_to_min_positions = occurences_data.getMax_to_min_positions();
+        long[][] occurences = occurences_data.getOccurences();
+        for (int i = 0; i < max_to_min_positions.size(); i++) {
+            Position current_pos = max_to_min_positions.get(i);
+//            System.out.println("X : " + current_pos.getX() + ", Y : " + current_pos.getY());
+            System.out.println(occurences[current_pos.getX()][current_pos.getY()]);
+        }
 
         Keyboard k = new Keyboard();
 

@@ -1,5 +1,9 @@
 package model;
 
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Created by Steak on 27/12/2016.
  */
@@ -32,5 +36,29 @@ public class Position {
 
     public String toString() {
         return this.x + " " + this.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17,31).
+                append(x).
+                append(y).
+                toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Position)) {
+            return false;
+        }
+        if (other == this) {
+        return true;
+        }
+
+        Position other_pos = (Position) other;
+        return new EqualsBuilder().
+                append(x, other_pos.getX()).
+                append(y, other_pos.getY()).
+                isEquals();
     }
 }
