@@ -22,6 +22,7 @@ public class Keyboard {
     public Keyboard() {
         this.keys= new Letter[4][10];
         this.keyPos= new HashMap<Letter, Position>();
+        this.lettersCost = new HashMap<>();
         this.emptyPos = new ArrayList<>();
         initEmptyPos();
     }
@@ -73,7 +74,7 @@ public class Keyboard {
 
     /**
      * Set a letter on keyboard
-     * @param al
+     * @param letter
      * @param x
      * @param y
      */
@@ -113,7 +114,7 @@ public class Keyboard {
         Position p2 = this.getLetterPosition(l2);
 
         double distance = p1.euclideanDistance(p2);
-        long occurence = occurences[l1.getValue()][l2.getValue()];
+        long occurence = occurences[l1.getValue()-1][l2.getValue()-1];
 
         double result = distance * occurence;
 

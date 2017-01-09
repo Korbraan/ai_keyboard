@@ -13,7 +13,7 @@ public class OccurencesData {
     public OccurencesData(long[][] occurences) {
         this.occurences = occurences;
         this.max_to_min_positions = new ArrayList<Position>();
-        this.sortOccurences();
+//        this.sortOccurences();
     }
 
     private void sortOccurences() {
