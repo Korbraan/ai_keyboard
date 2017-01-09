@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -13,19 +15,31 @@ public class Keyboard {
 
     private Letter[][] keys;
     private HashMap<Letter, Position> keyPos;
+    private ArrayList<Position> emptyPos;
     private HashMap<Letter, Double> lettersCost;
     private double cost;
 
     public Keyboard() {
         this.keys= new Letter[4][10];
         this.keyPos= new HashMap<Letter, Position>();
+        this.emptyPos = new ArrayList<>();
+        initEmptyPos();
     }
 
     public Keyboard(Keyboard k) {
         this.keys = k.keys;
         this.keyPos = k.keyPos;
+        this.emptyPos = k.emptyPos;
         this.lettersCost = k.lettersCost;
         this.cost = k.cost;
+    }
+
+    private void initEmptyPos() {
+        for (int i = 0; i < keys.length; i++) {
+            for (int j = 0; j < keys[i].length; j++) {
+                emptyPos.add(new Position(i, j));
+            }
+        }
     }
 
     public void createRandomKeyboard() {
@@ -63,10 +77,12 @@ public class Keyboard {
      * @param x
      * @param y
      */
-    public void setKey(Letter al, int x, int y) {
-        keys[x][y]=al;
+    public void setKey(Letter letter, int x, int y) {
+        keys[x][y]=letter;
         //System.out.println(keys[x][y].getValue());
-        keyPos.put(al, new Position(x,y));
+        Position pos = new Position(x, y);
+        emptyPos.remove(pos);
+        keyPos.put(letter, pos);
     }
 
     public Position getLetterPosition(Letter letter) {
@@ -128,6 +144,29 @@ public class Keyboard {
         }
 
         this.cost = cost;
+    }
+
+    public Letter getWorstLetter() {
+        Map.Entry<Letter, Double> maxEntry = null;
+
+        for (Map.Entry<Letter, Double> entry : lettersCost.entrySet()) {
+            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {
+                maxEntry = entry;
+            }
+        }
+
+        return maxEntry.getKey();
+    }
+
+    public void moveLetter(Letter letter) {
+        Position current_position = this.getLetterPosition(letter);
+        int index = ThreadLocalRandom.current().nextInt(emptyPos.size());
+
+        Position new_position = emptyPos.remove(index);
+        keys[current_position.getX()][current_position.getY()] = null;
+        keys[new_position.getX()][new_position.getY()] = letter;
+
+        computeCost();
     }
 
     public HashMap<Letter, Double> getLettersCost() {
