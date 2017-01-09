@@ -24,18 +24,7 @@ public class Main {
 
         OccurencesData occurences_data = data_parser.getOccurencesData();
 
-        /*
-        System.out.println("Occurences importées");
-        System.out.println(occurences.toString());
-        */
-
-        ArrayList<Position> max_to_min_positions = occurences_data.getMax_to_min_positions();
-        long[][] occurences = occurences_data.getOccurences();
-        for (int i = 0; i < max_to_min_positions.size(); i++) {
-            Position current_pos = max_to_min_positions.get(i);
-//            System.out.println("X : " + current_pos.getX() + ", Y : " + current_pos.getY());
-//            System.out.println(occurences[current_pos.getX()][current_pos.getY()]);
-        }
+        System.out.println("max : " + occurences_data.getMaxOccurence());
 
         Keyboard k = new Keyboard();
 
@@ -49,16 +38,6 @@ public class Main {
         System.out.println(simulatedAnnealing.getKeyboard().toString());
 
         Window window = new Window(k);
-
-        while(true){
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            k.createRandomKeyboard();
-        }
     }
 
 }

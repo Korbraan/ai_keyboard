@@ -95,19 +95,17 @@ public class Keyboard extends java.util.Observable {
     }
 
     public String toString() {
-        String res ="";
-        for(int i=0; i < keys.length; i++) {
-            res+="\n";
-            for(int j=0; j < keys[i].length; j++) {
+        String res = "";
+        for (int i = 0; i < keys.length; i++) {
+            res += "\n";
+            for (int j = 0; j < keys[i].length; j++) {
                 Letter current_key = keys[i][j];
-                if(current_key == null) {
-                    res+="  ";
-                } else if (current_key.getValue() < 10) {
-                    res += current_key.getValue() + " ";
+                if (current_key == null) {
+                    res += " ";
                 } else {
-                    res += current_key.getValue();
+                    res += current_key.toString();
                 }
-                res+="|";
+                res += "|";
             }
         }
         return res;
@@ -168,6 +166,8 @@ public class Keyboard extends java.util.Observable {
         int index = ThreadLocalRandom.current().nextInt(emptyPos.size());
 
         Position new_position = emptyPos.remove(index);
+        emptyPos.add(current_position);
+        keyPos.put(letter, new_position);
         keys[current_position.getX()][current_position.getY()] = null;
         keys[new_position.getX()][new_position.getY()] = letter;
 

@@ -14,6 +14,20 @@ public class OccurencesData {
         this.occurences = occurences;
         this.max_to_min_positions = new ArrayList<Position>();
 //        this.sortOccurences();
+
+    }
+
+    public long getMaxOccurence() {
+        long max = 0;
+        for (int i = 0; i < occurences.length; i++) {
+           for (int j = 0; j < occurences[i].length; j++) {
+               long local_max = 0;
+               if ((local_max = occurences[i][j]) > max) {
+                   max = local_max;
+               }
+           }
+        }
+        return max;
     }
 
     private void sortOccurences() {
