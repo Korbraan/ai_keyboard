@@ -19,7 +19,6 @@ public class Keyboard {
     public Keyboard() {
         this.keys= new Letter[4][10];
         this.keyPos= new HashMap<Letter, Position>();
-        this.lettersCost = new HashMap<Letter, Double>();
     }
 
     public void createRandomKeyboard() {
@@ -41,6 +40,7 @@ public class Keyboard {
                 }
             }
         }
+        computeCost();
     }
 
     public Letter[][] getKeyboard(){
@@ -111,6 +111,10 @@ public class Keyboard {
 
     public void computeCost() {
         double cost = 0;
+
+        for (Letter letter : Letter.values()) {
+            computeLetterCost(letter);
+        }
 
         for (Map.Entry<Letter, Double> entry : lettersCost.entrySet()) {
             cost += entry.getValue();

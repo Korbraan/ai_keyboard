@@ -20,4 +20,6 @@ public class SimulatedAnnealing {
         this.energy = energy;
     }
 
+
+
 }
