@@ -1,4 +1,5 @@
 import algorithms.SimulatedAnnealing;
+import gui.Window;
 import models.Keyboard;
 import models.OccurencesData;
 import models.Position;
@@ -39,7 +40,6 @@ public class Main {
         Keyboard k = new Keyboard();
 
         k.createRandomKeyboard();
-
         System.out.println("Tableau de lettres random");
         System.out.println(k.toString());
 
@@ -47,6 +47,18 @@ public class Main {
         simulatedAnnealing.optimizeKeyboard();
 
         System.out.println(simulatedAnnealing.getKeyboard().toString());
+
+        Window window = new Window(k);
+
+        while(true){
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            k.createRandomKeyboard();
+        }
     }
 
 }

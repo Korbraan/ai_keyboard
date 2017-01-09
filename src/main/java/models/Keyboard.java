@@ -11,7 +11,7 @@ import static models.OccurencesData.occurences;
 /**
  * Created by Steak on 27/12/2016.
  */
-public class Keyboard {
+public class Keyboard extends java.util.Observable {
 
     private Letter[][] keys;
     private HashMap<Letter, Position> keyPos;
@@ -45,6 +45,8 @@ public class Keyboard {
 
     public void createRandomKeyboard() {
 
+        this.keys = new Letter[4][10];
+
         Letter[] possibleValues = Letter.class.getEnumConstants();
 
         for(int i = 0; i < 26; i++) {
@@ -63,6 +65,8 @@ public class Keyboard {
             }
         }
         computeCost();
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public Letter[][] getKeyboard(){

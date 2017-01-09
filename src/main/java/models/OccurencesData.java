@@ -38,7 +38,7 @@ public class OccurencesData {
                 for (int j = 0; j < occurences[i].length; j++) {
                     Position current_pos = new Position(i,j);
                     // If is higher and not already in the array
-                    System.out.println("is in array : " + max_to_min_positions.contains(current_pos));
+                    //System.out.println("is in array : " + max_to_min_positions.contains(current_pos));
 
                     if (occurences[i][j] >= occurences[max_pos.getX()][max_pos.getY()] &&
                             !max_to_min_positions.contains(current_pos)) {
@@ -50,7 +50,7 @@ public class OccurencesData {
 //            System.out.println("max_pos : " + max_pos + ", value : " + occurences[max_pos.getX()][max_pos.getY()]);
             max_to_min_positions.add(max_pos);
             for (int l = 0; l < max_to_min_positions.size(); l++) {
-                System.out.println("x : " + max_to_min_positions.get(l).getX() + ", y : " + max_to_min_positions.get(l).getY());
+                //System.out.println("x : " + max_to_min_positions.get(l).getX() + ", y : " + max_to_min_positions.get(l).getY());
             }
         }
     }
