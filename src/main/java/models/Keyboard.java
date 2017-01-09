@@ -9,7 +9,7 @@ import static models.OccurencesData.occurences;
 /**
  * Created by Steak on 27/12/2016.
  */
-public class Keyboard {
+public class Keyboard implements Cloneable {
 
     private Letter[][] keys;
     private HashMap<Letter, Position> keyPos;
@@ -19,6 +19,11 @@ public class Keyboard {
     public Keyboard() {
         this.keys= new Letter[4][10];
         this.keyPos= new HashMap<Letter, Position>();
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public void createRandomKeyboard() {
