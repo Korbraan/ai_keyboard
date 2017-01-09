@@ -11,7 +11,7 @@ import java.io.*;
  */
 public class DataParser {
     private File data_file;
-    private OccurencesData occurences_data;
+    private long[][] occurences;
 
     public DataParser(String data_file_path) {
         this.data_file = new File(data_file_path);
@@ -34,7 +34,7 @@ public class DataParser {
                     j++;
                 }
             }
-            this.occurences_data = new OccurencesData(occurences);
+            this.occurences = occurences;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -42,8 +42,8 @@ public class DataParser {
         }
     }
 
-    public OccurencesData getOccurencesData() {
-        return occurences_data;
+    public long[][] getOccurences() {
+        return occurences;
     }
 
 }
