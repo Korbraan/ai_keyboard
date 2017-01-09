@@ -55,5 +55,13 @@ public class Position {
                 toHashCode();
     }
 
+    public double euclideanDistance(Position other) {
+        double result = 0;
+        result = Math.pow((double) other.getX() - this.getX(), 2);
+        result = result + Math.pow((double) other.getY() - this.getY(), 2);
+        result = Math.sqrt((double) result);
+
+        return result;
+    }
 
 }

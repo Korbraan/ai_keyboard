@@ -6,9 +6,9 @@ import java.util.ArrayList;
  * Created by cremond on 27/12/16.
  */
 public class OccurencesData {
-    long[][] occurences;
+    public static long[][] occurences;
 
-    ArrayList<Position >max_to_min_positions;
+    private ArrayList<Position >max_to_min_positions;
 
     public OccurencesData(long[][] occurences) {
         this.occurences = occurences;

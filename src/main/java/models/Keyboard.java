@@ -1,7 +1,10 @@
 package models;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static models.OccurencesData.occurences;
 
 /**
  * Created by Steak on 27/12/2016.
@@ -10,10 +13,13 @@ public class Keyboard {
 
     private Letter[][] keys;
     private HashMap<Letter, Position> keyPos;
+    private HashMap<Letter, Double> lettersCost;
+    private double cost;
 
     public Keyboard() {
         this.keys= new Letter[4][10];
         this.keyPos= new HashMap<Letter, Position>();
+        this.lettersCost = new HashMap<Letter, Double>();
     }
 
     public void createRandomKeyboard() {
@@ -56,6 +62,10 @@ public class Keyboard {
         keyPos.put(al, new Position(x,y));
     }
 
+    public Position getLetterPosition(Letter letter) {
+        return keyPos.get(letter);
+    }
+
     public String toString() {
         String res ="";
         for(int i=0; i < keys.length; i++) {
@@ -74,4 +84,47 @@ public class Keyboard {
         }
         return res;
     }
+
+    public double twoLettersCost(Letter l1, Letter l2) {
+        Position p1 = this.getLetterPosition(l1);
+        Position p2 = this.getLetterPosition(l2);
+
+        double distance = p1.euclideanDistance(p2);
+        long occurence = occurences[l1.getValue()][l2.getValue()];
+
+        double result = distance * occurence;
+
+        return result;
+    }
+
+    public void computeLetterCost(Letter letter) {
+        double letterCost = 0;
+
+        for (Letter other : Letter.values()) {
+            if (!other.equals(letter)) {
+                letterCost += twoLettersCost(letter, other);
+            }
+        }
+
+        this.lettersCost.put(letter, letterCost);
+    }
+
+    public void computeCost() {
+        double cost = 0;
+
+        for (Map.Entry<Letter, Double> entry : lettersCost.entrySet()) {
+            cost += entry.getValue();
+        }
+
+        this.cost = cost;
+    }
+
+    public HashMap<Letter, Double> getLettersCost() {
+        return lettersCost;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
 }
