@@ -1,8 +1,8 @@
 package main;
 
-import model.Keyboard;
-import model.OccurencesData;
-import model.Position;
+import models.Keyboard;
+import models.OccurencesData;
+import models.Position;
 import tools.DataParser;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class Main {
         for (int i = 0; i < max_to_min_positions.size(); i++) {
             Position current_pos = max_to_min_positions.get(i);
 //            System.out.println("X : " + current_pos.getX() + ", Y : " + current_pos.getY());
-            System.out.println(occurences[current_pos.getX()][current_pos.getY()]);
+//            System.out.println(occurences[current_pos.getX()][current_pos.getY()]);
         }
 
         Keyboard k = new Keyboard();

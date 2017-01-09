@@ -1,6 +1,6 @@
 package algorithms;
 
-import model.Keyboard;
+import models.Keyboard;
 
 /**
  * Created by cremond on 27/12/16.

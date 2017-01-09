@@ -1,10 +1,8 @@
 package tools;
 
-import model.OccurencesData;
+import models.OccurencesData;
 
 import java.io.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 /**
  * Created by cremond on 17/12/16.
