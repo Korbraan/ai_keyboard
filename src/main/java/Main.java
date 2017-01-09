@@ -1,5 +1,3 @@
-package main;
-
 import models.Keyboard;
 import models.OccurencesData;
 import models.Position;
