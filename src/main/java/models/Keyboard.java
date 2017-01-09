@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static models.OccurencesData.getMaxOccurence;
 import static models.OccurencesData.occurences;
 
 /**
@@ -118,9 +119,16 @@ public class Keyboard extends java.util.Observable {
         double distance = p1.euclideanDistance(p2);
         long occurence = occurences[l1.getValue()-1][l2.getValue()-1];
 
-        double result = distance * occurence;
+        double result = distance * getCoeff() + occurence;
 
         return result;
+    }
+
+    public double getCoeff() {
+        //TODO : Move that to the proper class
+        Position p1 = new Position(0,0);
+        Position p2 = new Position (keys.length,keys[0].length);
+        return getMaxOccurence()/p1.euclideanDistance(p2);
     }
 
     public void computeLetterCost(Letter letter) {

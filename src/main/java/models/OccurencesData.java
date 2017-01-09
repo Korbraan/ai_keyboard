@@ -17,7 +17,7 @@ public class OccurencesData {
 
     }
 
-    public long getMaxOccurence() {
+    public static long getMaxOccurence() {
         long max = 0;
         for (int i = 0; i < occurences.length; i++) {
            for (int j = 0; j < occurences[i].length; j++) {
