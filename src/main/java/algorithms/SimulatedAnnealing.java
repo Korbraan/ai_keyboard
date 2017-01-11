@@ -3,8 +3,10 @@ package algorithms;
 
 import models.Keyboard;
 import models.Letter;
+import models.OccurencesData;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by cremond on 27/12/16.
@@ -23,7 +25,7 @@ public class SimulatedAnnealing {
     }
 
     public void optimizeKeyboard() {
-        while (temperature >= 1) {
+        while (temperature >= 2) {
             Keyboard nextKeyboard = new Keyboard(keyboard);
             Letter letter = keyboard.getWorstLetter();
             boolean optimized = false;
@@ -48,16 +50,12 @@ public class SimulatedAnnealing {
     }
 
     public boolean isLucky(double energy) {
-            Random r = new Random();
-        double p = r.nextDouble();
-        return p <= Math.exp(-(energy-this.energy)/temperature);
+        double p = ThreadLocalRandom.current().nextDouble();
+        return p <= Math.exp((energy-this.energy)/temperature);
     }
 
     public double temperature(int n) {
         //TODO : Implement a temperature function
-        return 100/n;
+        return OccurencesData.getMaxOccurence()/(1000*n);
     }
-
-
-
 }
