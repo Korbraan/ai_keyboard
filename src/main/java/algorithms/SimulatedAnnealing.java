@@ -17,7 +17,6 @@ public class SimulatedAnnealing {
 
     public SimulatedAnnealing(Keyboard keyboard) {
         this.keyboard = keyboard;
-        keyboard.createRandomKeyboard();
         this.energy = keyboard.getCost();
         this.n = 1;
         this.temperature = temperature(n);
