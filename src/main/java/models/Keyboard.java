@@ -16,13 +16,15 @@ public class Keyboard extends java.util.Observable {
 
     private Letter[][] keys;
     private HashMap<Letter, Position> keyPos;
+    private HashMap<Position, Letter> posKey;
     private ArrayList<Position> emptyPos;
     private HashMap<Letter, Double> lettersCost;
     private double cost;
 
     public Keyboard() {
         this.keys= new Letter[4][10];
-        this.keyPos= new HashMap<Letter, Position>();
+        this.keyPos = new HashMap<>();
+        this.posKey = new HashMap<>();
         this.lettersCost = new HashMap<>();
         this.emptyPos = new ArrayList<>();
         initEmptyPos();
@@ -31,6 +33,7 @@ public class Keyboard extends java.util.Observable {
     public Keyboard(Keyboard k) {
         this.keys = k.keys;
         this.keyPos = k.keyPos;
+        this.posKey = k.posKey;
         this.emptyPos = k.emptyPos;
         this.lettersCost = k.lettersCost;
         this.cost = k.cost;
@@ -89,6 +92,7 @@ public class Keyboard extends java.util.Observable {
         Position pos = new Position(x, y);
         emptyPos.remove(pos);
         keyPos.put(letter, pos);
+        posKey.put(pos, letter);
     }
 
     public Position getLetterPosition(Letter letter) {
@@ -113,13 +117,12 @@ public class Keyboard extends java.util.Observable {
     }
 
     public double twoLettersCost(Letter l1, Letter l2) {
-        Position p1 = this.getLetterPosition(l1);
-        Position p2 = this.getLetterPosition(l2);
+        Position p1 = this.keyPos.get(l1);
+        Position p2 = this.keyPos.get(l2);
 
         double distance = p1.euclideanDistance(p2);
-        long occurence = occurences[l1.getValue()-1][l2.getValue()-1];
-
-        double result = distance * getCoeff() + occurence;
+        double occurence = occurences[l1.getValue()-1][l2.getValue()-1];
+        double result = distance * occurence;
 
         return result;
     }
@@ -157,27 +160,57 @@ public class Keyboard extends java.util.Observable {
         this.cost = cost;
     }
 
-    public Letter getWorstLetter() {
-        Map.Entry<Letter, Double> maxEntry = null;
-
-        for (Map.Entry<Letter, Double> entry : lettersCost.entrySet()) {
-            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {
-                maxEntry = entry;
-            }
-        }
-
-        return maxEntry.getKey();
-    }
-
-    public void moveLetter(Letter letter) {
+    public void moveLetterInEmpty(Letter letter) {
         Position current_position = this.getLetterPosition(letter);
         int index = ThreadLocalRandom.current().nextInt(emptyPos.size());
 
         Position new_position = emptyPos.remove(index);
         emptyPos.add(current_position);
         keyPos.put(letter, new_position);
+        posKey.put(new_position, letter);
         keys[current_position.getX()][current_position.getY()] = null;
         keys[new_position.getX()][new_position.getY()] = letter;
+
+        computeCost();
+    }
+
+    public void moveLetter(Letter letter) {
+        // TODO en fait ce serait mieux de pouvoir swap deux lettres car le résultat sera un paquet condensé de lettres
+        Position initial_position = this.getLetterPosition(letter);
+
+        int x = ThreadLocalRandom.current().nextInt(4);
+        int y = ThreadLocalRandom.current().nextInt(10);
+        //int index = ThreadLocalRandom.current().nextInt(empty_positions.size());
+
+        //Position new_position = empty_positions.remove(index);
+        //empty_positions.add(initial_position);
+
+        Position new_position = new Position(x, y);
+
+        if (emptyPos.contains(new_position)) {
+            emptyPos.remove(new_position);
+
+            posKey.remove(initial_position);
+            keyPos.remove(letter);
+
+            posKey.put(new_position, letter);
+            keyPos.put(letter, new_position);
+
+            keys[initial_position.getX()][initial_position.getY()] = null;
+            keys[new_position.getX()][new_position.getY()] = letter;
+
+        } else {
+            Letter letter_to_swap = posKey.get(new_position);
+
+            posKey.put(initial_position, letter_to_swap);
+            keyPos.put(letter_to_swap, initial_position);
+
+            posKey.put(new_position, letter);
+            keyPos.put(letter, new_position);
+
+            keys[initial_position.getX()][initial_position.getY()] = letter_to_swap;
+            keys[new_position.getX()][new_position.getY()] = letter;
+        }
 
         computeCost();
     }

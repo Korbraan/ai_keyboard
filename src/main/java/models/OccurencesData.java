@@ -7,12 +7,14 @@ import java.util.ArrayList;
  */
 public class OccurencesData {
     public static long[][] occurences;
+    public static long maxOccurence;
 
     public OccurencesData(long[][] occurences) {
         this.occurences = occurences;
+        this.maxOccurence = computeMaxOccurence();
     }
 
-    public static long getMaxOccurence() {
+    public static long computeMaxOccurence() {
         long max = 0;
         for (int i = 0; i < occurences.length; i++) {
            for (int j = 0; j < occurences[i].length; j++) {
@@ -44,5 +46,9 @@ public class OccurencesData {
 
     public long[][] getOccurences() {
         return occurences;
+    }
+
+    public static long getMaxOccurence() {
+        return maxOccurence;
     }
 }

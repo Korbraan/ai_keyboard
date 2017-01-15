@@ -12,6 +12,7 @@ public class Gene {
         this.y = y;
     }
 
+    // TODO utiliser la distance définie dans Position
     public double euclideanDistance(Gene other) {
         double result = 0;
         result = Math.pow((double) other.getX() - this.getX(), 2);
