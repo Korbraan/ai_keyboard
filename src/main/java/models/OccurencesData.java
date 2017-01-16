@@ -26,15 +26,6 @@ public class OccurencesData {
 
     public void replaceOccurenceByRank() {
         List<Long> sortedOcc = sortedOccurences();
-        System.out.println("sortedOcc = " + sortedOcc);
-
-        for (int i = 0; i < occurences.length; i++) {
-            for (int j = 0; j < occurences[i].length; j++) {
-                if (occurences[i][j] == 0)
-                    System.out.println("[" + i + "," + j + "]");
-            }
-        }
-
 
         for (int k = sortedOcc.size()-1 ; k>=0; k--) {
             for (int i = 0; i < occurences.length; i++) {
@@ -44,6 +35,14 @@ public class OccurencesData {
                 }
             }
         }
+        /* Hack */
+        for (int i = 0; i < occurences.length; i++) {
+            for (int j = 0; j < occurences[i].length; j++) {
+                if (occurences[i][j] == 7)
+                    occurences[i][j] = 0;
+            }
+        }
+
     }
 
     public static long getMaxOccurence() {

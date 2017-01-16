@@ -1,6 +1,8 @@
 package models.Genetic;
 
 
+import models.Letter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +18,7 @@ public class Candidate implements Comparable<Candidate> {
 
     private Gene[] genes;
     private List<Gene> availableGenes;
-    private double cost;
+    private int cost;
 
     public Candidate() {
         this.genes = new Gene[26];
@@ -27,7 +29,7 @@ public class Candidate implements Comparable<Candidate> {
 
     public Candidate(Gene[] genes) {
         if (genes.length != 26) {
-            System.out.println("Error : Every candidate should have 26 genes");
+            System.out.println("Error : Every candidate should have 2 genes");
             return;
         }
         this.genes = genes;
@@ -45,7 +47,7 @@ public class Candidate implements Comparable<Candidate> {
         if (availableGenes.size() != 14)
             System.out.println("Error : availableGenes size should be 14 but is " + availableGenes.size());
         if (genes.length != 26)
-            System.out.println("Error : genotype size should be 26");
+            System.out.println("Error : genotype size should be 2");
     }
 
     public Candidate[] cross(Candidate other) {
@@ -67,21 +69,33 @@ public class Candidate implements Comparable<Candidate> {
             }
         }
         /* we have to mutate the duplications*/
-        for (int x=0;x<10;x++) {
-            for (int y=0;y<4;y++) {
+        for (int x=0;x<4;x++) {
+            for (int y=0;y<10;y++) {
                 List<Integer> occIndex = getOccurence(new Gene(x,y), genes1);
                 while (occIndex.size()>1) {
                     int oldAllele = random.nextInt(occIndex.size());
                     int newAllele = random.nextInt(14);
-                    genes[occIndex.get(oldAllele)] = availableGenes.get(newAllele);
+                    genes1[occIndex.get(oldAllele)] = getAvailableGenes(genes1).get(newAllele) ;
                     occIndex.remove(oldAllele);
-                    computeAvailableGenes();
+                }
+            }
+        }
+
+        /* second child ... */
+        for (int x=0;x<4;x++) {
+            for (int y=0;y<10;y++) {
+                List<Integer> occIndex = getOccurence(new Gene(x,y), genes2);
+                while (occIndex.size()>1) {
+                    int oldAllele = random.nextInt(occIndex.size());
+                    int newAllele = random.nextInt(14);
+                    genes2[occIndex.get(oldAllele)] = getAvailableGenes(genes2).get(newAllele);
+                    occIndex.remove(oldAllele);
                 }
             }
         }
         Candidate child1 = new Candidate(genes1);
         Candidate child2 = new Candidate(genes2);
-        return new Candidate[]{child1,child2};
+        return new Candidate[]{child1,child1};
     }
 
     public void mutate(double p) {
@@ -103,7 +117,7 @@ public class Candidate implements Comparable<Candidate> {
             cost += computeGeneCost(genes[i],i);
         }
 
-        this.cost = cost;
+        this.cost = (int) cost/1000;
     }
 
     public double computeGeneCost(Gene gene, int index) {
@@ -120,22 +134,23 @@ public class Candidate implements Comparable<Candidate> {
 
         double distance = g1.euclideanDistance(g2);
         long occurence = occurences[index1][index2];
+        if (occurence == 0) return 0;
 
-        return distance * getCoeff() + occurence;
+        return distance * occurence;
     }
 
     public double getCoeff() {
         //TODO : Move that to the proper class
         Gene g1 = new Gene(0,0);
-        Gene g2 = new Gene(9,3);
+        Gene g2 = new Gene(3,9);
         return getMaxOccurence()/g1.euclideanDistance(g2);
     }
 
 
     public void computeAvailableGenes() {
         List<Gene> availableGenes = new ArrayList<>();
-        for (int x=0;x<10;x++) {
-            for (int y = 0; y <4; y++) {
+        for (int x=0;x<4;x++) {
+            for (int y = 0; y <10; y++) {
                 if (!Arrays.asList(genes).contains(new Gene(x,y)))
                     availableGenes.add(new Gene(x,y));
             }
@@ -143,11 +158,22 @@ public class Candidate implements Comparable<Candidate> {
         this.availableGenes = availableGenes;
     }
 
+    public List<Gene> getAvailableGenes(Gene[] genes) {
+        List<Gene> availableGenes = new ArrayList<>();
+        for (int x=0;x<4;x++) {
+            for (int y = 0; y <10; y++) {
+                if (!Arrays.asList(genes).contains(new Gene(x,y)))
+                    availableGenes.add(new Gene(x,y));
+            }
+        }
+        return availableGenes;
+    }
+
     public Gene[] getGenes() {
         return genes;
     }
 
-    public double getCost() {
+    public int fitness() {
         return cost;
     }
 
@@ -165,17 +191,45 @@ public class Candidate implements Comparable<Candidate> {
     }
 
     public String toString() {
-        String res = "{";
-        for (Gene gene : genes) {
-            res+="["+gene.getX()+","+gene.getY()+"]";
-            res+=",";
+        String res = "";
+        String[][] k = new String[4][10];
+        for (int i = 0; i < genes.length; i++) {
+            Gene g = genes[i];
+            k[g.getX()][g.getY()] = String.valueOf(Letter.values()[i]);
         }
-        res += "}";
+        for (int x = 0 ; x<4 ; x++)
+            for (int y = 0; y<10 ; y++)
+                if (k[x][y] == null)
+                    k[x][y] = " ";
+        for (int x = 0; x<4 ; x++) {
+            res += Arrays.toString(k[x]) + "\n";
+        }
         return res;
     }
 
     @Override
     public int compareTo(Candidate o) {
-        return Double.compare(cost, o.getCost());
+        return Integer.compare(cost, o.fitness());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Candidate candidate = (Candidate) o;
+
+        if (cost != candidate.cost) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(genes, candidate.genes)) return false;
+        return availableGenes != null ? availableGenes.equals(candidate.availableGenes) : candidate.availableGenes == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(genes);
+        result = 31 * result + (availableGenes != null ? availableGenes.hashCode() : 0);
+        result = 31 * result + cost;
+        return result;
     }
 }

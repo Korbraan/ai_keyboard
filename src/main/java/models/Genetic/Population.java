@@ -25,8 +25,9 @@ public class Population {
         List<Candidate> candidates = new ArrayList<>(this.candidates);
         Random random = new Random();
         Collections.sort(candidates);
+        Collections.reverse(candidates);
         int size = candidates.size();
-        for (int i=0;i<candidateNumber;i++) {
+        for (int i=0;i<candidateNumber-1;i++) {
             int pDomain = size*(size+1)/2;
             int p = random.nextInt(pDomain);
             int bornSup = 1;
@@ -38,6 +39,8 @@ public class Population {
                 bornSup += j+1;
             }
         }
+        /* ensure we keep selecting the best one */
+        selectedCandidates.add(candidates.get(size-1));
         return new Population(selectedCandidates);
     }
 
@@ -47,6 +50,8 @@ public class Population {
         for (Candidate[] couple : couples) {
             Candidate[] coupleChildren = couple[0].cross(couple[1]);
             for (Candidate child : coupleChildren) {
+                if (child.getAvailableGenes().size() != 14)
+                    throw new RuntimeException(String.valueOf(child.getAvailableGenes().size()));
                 children.add(child);
             }
         }
@@ -55,17 +60,11 @@ public class Population {
 
     public List<Candidate[]> generateCouples() {
         List<Candidate[]> couples = new ArrayList<>();
-        List<Candidate> mens = new ArrayList<>(candidates);
-        List<Candidate> womens = new ArrayList<>(candidates);
-        for (Candidate male : candidates) {
-            for (Candidate female : candidates) {
-                if (male != female) {
-                    couples.add(new Candidate[]{male,female});
-                    mens.remove(male);
-                    womens.remove(female);
-                }
-            }
-        }
+        List<Candidate> candidates = new ArrayList<>(this.candidates);
+        Collections.shuffle(candidates);
+
+        for (int i=0; i<candidates.size()-1 ; i+=2)
+            couples.add(new Candidate[]{candidates.get(i),candidates.get(i+1)});
         return couples;
     }
 
@@ -74,16 +73,25 @@ public class Population {
         List<Candidate> candidates = new ArrayList<>(this.candidates);
         candidates.addAll(created.getCandidates());
         Collections.sort(candidates);
+        Collections.reverse(candidates);
         int totalSize = candidates.size();
         candidates = candidates.subList(totalSize-wantedSize, totalSize);
+
         return new Population(candidates);
+    }
+
+    public int meanFitness() {
+        int fitness = 0;
+        for (Candidate candidate : candidates) {
+            fitness += candidate.fitness();
+        }
+        return fitness;
     }
 
     public String toString() {
         String res = "";
         for (Candidate candidate : candidates) {
-//            res += candidate.toString();
-            System.out.println(candidate.getCost());
+            res += candidate.toString();
             res += "\n";
             res += "---";
             res += "\n";
