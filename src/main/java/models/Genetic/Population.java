@@ -1,7 +1,5 @@
 package models.Genetic;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.*;
 
 /**
@@ -24,6 +22,7 @@ public class Population {
 
     public Population selectByRank(int candidateNumber) {
         List<Candidate> selectedCandidates = new ArrayList<>();
+        List<Candidate> candidates = new ArrayList<>(this.candidates);
         Random random = new Random();
         Collections.sort(candidates);
         int size = candidates.size();
@@ -47,8 +46,9 @@ public class Population {
         List<Candidate[]> couples = generateCouples();
         for (Candidate[] couple : couples) {
             Candidate[] coupleChildren = couple[0].cross(couple[1]);
-            for (Candidate child : coupleChildren)
+            for (Candidate child : coupleChildren) {
                 children.add(child);
+            }
         }
         return new Population(children);
     }
@@ -77,6 +77,18 @@ public class Population {
         int totalSize = candidates.size();
         candidates = candidates.subList(totalSize-wantedSize, totalSize);
         return new Population(candidates);
+    }
+
+    public String toString() {
+        String res = "";
+        for (Candidate candidate : candidates) {
+//            res += candidate.toString();
+            System.out.println(candidate.getCost());
+            res += "\n";
+            res += "---";
+            res += "\n";
+        }
+        return res;
     }
 
     public List<Candidate> getCandidates() {
