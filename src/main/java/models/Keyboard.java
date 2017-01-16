@@ -155,8 +155,7 @@ public class Keyboard extends java.util.Observable {
         }
 
         this.cost = cost;
-        //this.setChanged();
-        //this.notifyObservers();
+        updateGUI();
     }
 
     public Letter getWorstLetter() {
@@ -181,14 +180,12 @@ public class Keyboard extends java.util.Observable {
         keys[current_position.getX()][current_position.getY()] = null;
         keys[new_position.getX()][new_position.getY()] = letter;
 
-        //this.setChanged();
-        //this.notifyObservers();
+        updateGUI();
 
         computeCost();
     }
 
     public void updateGUI(){
-        System.out.println("GUI UPDATE METHOD");
         setChanged();
         notifyObservers();
     }
