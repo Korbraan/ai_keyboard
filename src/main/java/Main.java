@@ -28,16 +28,14 @@ public class Main {
 
         Keyboard k = new Keyboard();
 
-        k.createRandomKeyboard();
+        Window window = new Window(k);
+
+        //k.createRandomKeyboard();
         System.out.println("Tableau de lettres random");
         System.out.println(k.toString());
 
-        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(k);
-        simulatedAnnealing.optimizeKeyboard();
+       // System.out.println(simulatedAnnealing.getKeyboard().toString());
 
-        System.out.println(simulatedAnnealing.getKeyboard().toString());
-
-        Window window = new Window(k);
     }
 
 }

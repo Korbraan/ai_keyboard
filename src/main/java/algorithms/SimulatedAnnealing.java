@@ -14,18 +14,16 @@ public class SimulatedAnnealing {
     private int n;
     private double temperature;
     private double energy;
-    private Keyboard keyboard;
 
     public SimulatedAnnealing(Keyboard keyboard) {
-        this.keyboard = keyboard;
         this.energy = keyboard.getCost();
         this.n = 1;
         this.temperature = temperature(n);
     }
 
-    public void optimizeKeyboard() {
+    public void optimizeKeyboard(Keyboard k) {
         while (temperature >= 1) {
-            Keyboard nextKeyboard = new Keyboard(keyboard);
+            Keyboard nextKeyboard = new Keyboard(k);
 //            Letter letter = keyboard.getWorstLetter();
 
             // Plutôt que de prendre la pire lettre, on prend une lettre au hasard --> sortir des extrema locaux
@@ -35,8 +33,8 @@ public class SimulatedAnnealing {
             while (!optimized) {
                 nextKeyboard.moveLetter(letter);
                 double nextEnergy = nextKeyboard.getCost();
-                if (nextKeyboard.getCost() < keyboard.getCost() || isLucky(nextEnergy)) {
-                    keyboard = nextKeyboard;
+                if (nextKeyboard.getCost() < k.getCost() || isLucky(nextEnergy)) {
+                    k = nextKeyboard;
                     energy = nextEnergy;
                     n++;
                     temperature = temperature(n);
@@ -45,12 +43,8 @@ public class SimulatedAnnealing {
                 }
             }
         }
-
     }
 
-    public Keyboard getKeyboard() {
-        return keyboard;
-    }
 
     public boolean isLucky(double energy) {
             Random r = new Random();

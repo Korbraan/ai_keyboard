@@ -66,8 +66,6 @@ public class Keyboard extends java.util.Observable {
             }
         }
         computeCost();
-        this.setChanged();
-        this.notifyObservers();
     }
 
     public Letter[][] getKeyboard(){
@@ -89,6 +87,8 @@ public class Keyboard extends java.util.Observable {
         Position pos = new Position(x, y);
         emptyPos.remove(pos);
         keyPos.put(letter, pos);
+        //this.setChanged();
+        //this.notifyObservers();
     }
 
     public Position getLetterPosition(Letter letter) {
@@ -155,6 +155,8 @@ public class Keyboard extends java.util.Observable {
         }
 
         this.cost = cost;
+        //this.setChanged();
+        //this.notifyObservers();
     }
 
     public Letter getWorstLetter() {
@@ -179,7 +181,16 @@ public class Keyboard extends java.util.Observable {
         keys[current_position.getX()][current_position.getY()] = null;
         keys[new_position.getX()][new_position.getY()] = letter;
 
+        //this.setChanged();
+        //this.notifyObservers();
+
         computeCost();
+    }
+
+    public void updateGUI(){
+        System.out.println("GUI UPDATE METHOD");
+        setChanged();
+        notifyObservers();
     }
 
     public HashMap<Letter, Double> getLettersCost() {

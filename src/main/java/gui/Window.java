@@ -22,8 +22,9 @@ public class Window  extends JFrame implements Observer {
         this.setVisible(true);
 
         KeyboardView kv = new KeyboardView(k);
-        this.add(kv, BorderLayout.CENTER);
-
+        MenuView mv = new MenuView(k);
+        this.add(kv, BorderLayout.WEST);
+        this.add(mv, BorderLayout.EAST);
         this.pack();
     }
     @Override
