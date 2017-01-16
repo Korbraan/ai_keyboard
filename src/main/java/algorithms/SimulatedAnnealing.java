@@ -5,6 +5,7 @@ import models.Keyboard;
 import models.Letter;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by cremond on 27/12/16.
@@ -25,7 +26,11 @@ public class SimulatedAnnealing {
     public void optimizeKeyboard() {
         while (temperature >= 1) {
             Keyboard nextKeyboard = new Keyboard(keyboard);
-            Letter letter = keyboard.getWorstLetter();
+//            Letter letter = keyboard.getWorstLetter();
+
+            // Plutôt que de prendre la pire lettre, on prend une lettre au hasard --> sortir des extrema locaux
+            Letter[] alphabet = Letter.values();
+            Letter letter = alphabet[ThreadLocalRandom.current().nextInt(alphabet.length)];
             boolean optimized = false;
             while (!optimized) {
                 nextKeyboard.moveLetter(letter);
