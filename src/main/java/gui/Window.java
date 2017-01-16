@@ -15,15 +15,16 @@ public class Window  extends JFrame implements Observer {
     public Window(Keyboard k){
 
         this.setTitle("Intelligence artificielle");
-        this.setSize(800,600);
+        this.setSize(800,200);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new BorderLayout());
+        this.setLayout(new GridLayout(2,1));
 
         this.setVisible(true);
 
         KeyboardView kv = new KeyboardView(k);
-        this.add(kv, BorderLayout.CENTER);
-
+        MenuView mv = new MenuView(k);
+        this.add(kv);
+        this.add(mv);
         this.pack();
     }
     @Override
