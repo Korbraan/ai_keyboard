@@ -14,13 +14,15 @@ public class Keyboard extends java.util.Observable {
 
     private Letter[][] keys;
     private HashMap<Letter, Position> keyPos;
+    private HashMap<Position, Letter> posKey;
     private ArrayList<Position> emptyPos;
     private HashMap<Letter, Double> lettersGain;
     private double gain;
 
     public Keyboard() {
         this.keys= new Letter[4][10];
-        this.keyPos= new HashMap<Letter, Position>();
+        this.keyPos= new HashMap<>();
+        this.posKey = new HashMap<>();
         this.lettersGain = new HashMap<>();
         this.emptyPos = new ArrayList<>();
         initEmptyPos();
@@ -84,6 +86,7 @@ public class Keyboard extends java.util.Observable {
         Position pos = new Position(x, y);
         emptyPos.remove(pos);
         keyPos.put(letter, pos);
+        posKey.put(pos, letter);
     }
 
     public Position getLetterPosition(Letter letter) {
@@ -146,19 +149,62 @@ public class Keyboard extends java.util.Observable {
         updateGUI();
     }
 
+//    public void moveLetter(Letter letter) {
+//        Position current_position = this.getLetterPosition(letter);
+//        int index = ThreadLocalRandom.current().nextInt(emptyPos.size());
+//
+//        Position new_position = emptyPos.remove(index);
+//        emptyPos.add(current_position);
+//        keyPos.put(letter, new_position);
+//        keys[current_position.getX()][current_position.getY()] = null;
+//        keys[new_position.getX()][new_position.getY()] = letter;
+//
+//        updateGUI();
+//
+//        computeGain();
+//    }
+
     public void moveLetter(Letter letter) {
-        Position current_position = this.getLetterPosition(letter);
-        int index = ThreadLocalRandom.current().nextInt(emptyPos.size());
+        // TODO en fait ce serait mieux de pouvoir swap deux lettres car le résultat sera un paquet condensé de lettres
+        Position initial_position = this.getLetterPosition(letter);
 
-        Position new_position = emptyPos.remove(index);
-        emptyPos.add(current_position);
-        keyPos.put(letter, new_position);
-        keys[current_position.getX()][current_position.getY()] = null;
-        keys[new_position.getX()][new_position.getY()] = letter;
+        int x = ThreadLocalRandom.current().nextInt(4);
+        int y = ThreadLocalRandom.current().nextInt(10);
+        //int index = ThreadLocalRandom.current().nextInt(empty_positions.size());
 
-        updateGUI();
+        //Position new_position = empty_positions.remove(index);
+        //empty_positions.add(initial_position);
+
+        Position new_position = new Position(x, y);
+
+        if (emptyPos.contains(new_position)) {
+            emptyPos.remove(new_position);
+
+            posKey.remove(initial_position);
+            keyPos.remove(letter);
+
+            posKey.put(new_position, letter);
+            keyPos.put(letter, new_position);
+
+            keys[initial_position.getX()][initial_position.getY()] = null;
+            keys[new_position.getX()][new_position.getY()] = letter;
+
+        } else {
+            Letter letter_to_swap = posKey.get(new_position);
+
+            posKey.put(initial_position, letter_to_swap);
+            keyPos.put(letter_to_swap, initial_position);
+
+            posKey.put(new_position, letter);
+            keyPos.put(letter, new_position);
+
+            keys[initial_position.getX()][initial_position.getY()] = letter_to_swap;
+            keys[new_position.getX()][new_position.getY()] = letter;
+        }
 
         computeGain();
+
+        updateGUI();
     }
 
     public void updateGUI(){

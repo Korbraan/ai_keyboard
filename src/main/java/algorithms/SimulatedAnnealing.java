@@ -19,7 +19,7 @@ public class SimulatedAnnealing {
         this.energy = keyboard.getGain();
         this.temperature = 1000;
         this.temperatureLimit = 0.01;
-        this.coolingRate = 0.999;
+        this.coolingRate = 0.99;
     }
 
     public void optimizeKeyboard(Keyboard k) {
