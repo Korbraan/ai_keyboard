@@ -22,7 +22,9 @@ public class MenuView extends JPanel implements Observer{
 
     private JPanel panel_buttons;
 
-    private JPanel panel_text;
+    private JPanel panel_field;
+
+    private JPanel panel_field_gen;
 
     public MenuView(Keyboard k){
 
@@ -31,14 +33,17 @@ public class MenuView extends JPanel implements Observer{
         this.panel_buttons=new JPanel();
         panel_buttons.setLayout(new GridLayout(2,2));
 
-        this.panel_text=new JPanel();
-        panel_text.setLayout(new GridLayout(2,4));
+        this.panel_field=new JPanel();
+        panel_field.setLayout(new GridLayout(2,1));
+
+        this.panel_field_gen=new JPanel();
+        panel_field_gen.setLayout(new GridLayout(1, 8));
 
         this.setLayout(new GridLayout(1,2));
 
         JLabel costLabel = new JLabel();
-        costLabel.setText("Fitness: "+Double.toString(k.getGain()));
-
+        String fit = "Fitness : "+(int)k.getGain();
+        costLabel.setText(fit);
 
         JLabel population_size = new JLabel("Population");
         JTextField population_sizefield = new JTextField("1000");
@@ -46,7 +51,7 @@ public class MenuView extends JPanel implements Observer{
         JTextField generationsfield = new JTextField("1200");
         JLabel selectionSize  = new JLabel("Selection");
         JTextField selectionSizefield = new JTextField("200");
-        JLabel mutateProb = new JLabel ("Mutation prob");
+        JLabel mutateProb = new JLabel ("Mutation");
         JTextField mutateProbField = new JTextField("0.2");
 
         JButton rec = new JButton("Simulated annealing");
@@ -59,7 +64,8 @@ public class MenuView extends JPanel implements Observer{
                 simulatedAnnealing.optimizeKeyboard(k);
                 k.computeGain();
                 System.out.println(k.getGain());
-                costLabel.setText(Double.toString(k.getGain()));
+                String fit = "Fitness : "+(int)k.getGain();
+                costLabel.setText(fit);
                 k.updateGUI();
             }
         });
@@ -72,7 +78,8 @@ public class MenuView extends JPanel implements Observer{
                 costLabel.setText(Double.toString(k.getGain()));
                 k.computeGain();
                 System.out.println(k.getGain());
-                costLabel.setText("Fitness: "+Double.toString(k.getGain()));
+                String fit = "Fitness : "+(int)k.getGain();
+                costLabel.setText(fit);
                 k.updateGUI();
             }
         });
@@ -86,29 +93,30 @@ public class MenuView extends JPanel implements Observer{
                 genetic = new Genetic(Integer.parseInt(population_sizefield.getText()), Integer.parseInt(generationsfield.getText()), Integer.parseInt(selectionSizefield.getText()), Double.parseDouble(mutateProbField.getText()));
                 genetic.optimizePopulation();
                 k.setKeys(genetic.optimizePopulation().getKeys());
-                k.computeGain();
-                costLabel.setText("Fitness: "+Double.toString(k.getGain()));
+                k.setGain(genetic.optimizePopulation().fitness());
+                String fit = "Fitness : "+(int)k.getGain();
+                costLabel.setText(fit);
                 k.updateGUI();
             }
         });
 
-        JTextField temp = new JTextField("");
-
         this.panel_buttons.add(costLabel);
-        this.panel_buttons.add(rec);
         this.panel_buttons.add(gen);
+        this.panel_buttons.add(new JLabel());
+        this.panel_buttons.add(rec);
 
-        this.panel_text.add(population_size);
-        this.panel_text.add(population_sizefield);
-        this.panel_text.add(generations);
-        this.panel_text.add(generationsfield);
-        this.panel_text.add(selectionSize);
-        this.panel_text.add(selectionSizefield);
-        this.panel_text.add(mutateProb);
-        this.panel_text.add(mutateProbField);
+        this.panel_field_gen.add(population_size);
+        this.panel_field_gen.add(population_sizefield);
+        this.panel_field_gen.add(generations);
+        this.panel_field_gen.add(generationsfield);
+        this.panel_field_gen.add(selectionSize);
+        this.panel_field_gen.add(selectionSizefield);
+        this.panel_field_gen.add(mutateProb);
+        this.panel_field_gen.add(mutateProbField);
 
         this.add(panel_buttons);
-        this.add(panel_text);
+        this.panel_field.add(panel_field_gen);
+        this.add(panel_field);
     }
 
     @Override

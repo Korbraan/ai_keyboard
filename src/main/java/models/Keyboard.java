@@ -170,6 +170,10 @@ public class Keyboard extends java.util.Observable {
         return gain;
     }
 
+    public void setGain(double gain){
+        this.gain=gain;
+    }
+
     public void setKeys(Letter[][] letters){
         this.keys=letters;
     }
