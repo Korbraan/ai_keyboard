@@ -2,6 +2,7 @@ package tools;
 
 
 
+import com.sun.org.apache.bcel.internal.util.ClassPath;
 import models.OccurencesData;
 
 import java.io.*;
@@ -10,17 +11,18 @@ import java.io.*;
  * Created by cremond on 17/12/16.
  */
 public class DataParser {
-    private File data_file;
+    private String data_file_path;
     private OccurencesData occurences_data;
 
     public DataParser(String data_file_path) {
-        this.data_file = new File(data_file_path);
+        this.data_file_path = data_file_path;
     }
 
     public void parseData() {
         try {
             long[][] occurences = new long[26][26];
-            BufferedReader br = new BufferedReader(new FileReader(data_file));
+            InputStream is = DataParser.class.getResourceAsStream(data_file_path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line = "";
             // For each line in the file, we process the data
             int j = 0;

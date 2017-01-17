@@ -7,7 +7,7 @@ import tools.DataParser;
 public class TestGenetic {
 
     public static void main(String[] args) {
-        String data_file_path = "./datafiles/bigramFreqEng-Occurrence.dat";
+        String data_file_path = "src/datafiles/bigramFreqEng-Occurrence.dat";
 
         DataParser data_parser = new DataParser(data_file_path);
 

@@ -7,7 +7,8 @@ import models.Keyboard;
 import tools.DataParser;
 
 import javax.swing.*;
-import java.util.HashMap;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by cremond on 17/01/17.
@@ -39,10 +40,12 @@ public class testForm {
     private JTextField azertyKeyboardGainField;
     private JTextField qwertyKeyboardGainField;
     private JLabel azertyKeyboardGainPanel;
+    private JButton selectDataFileButton;
+    private JFileChooser fileChooser;
 
     public testForm() {
 
-        DataParser dp = new DataParser("./datafiles/bigramFreqEng-Occurrence.dat");
+        DataParser dp = new DataParser("/datafiles/bigramFreqEng-Occurrence.dat");
         dp.parseData();
 
         azertyKeyboardGainField.setText("113");
