@@ -29,7 +29,7 @@ public class Genetic {
 
     public void optimizePopulation() {
         int[] fitnessvar = new int[generations];
-        System.out.println(currentPopulation.getCandidates().get(currentPopulation.getCandidates().size() - 1));
+//        System.out.println(currentPopulation.getCandidates().get(currentPopulation.getCandidates().size() - 1));
         for (int i = 0; i < generations; i++) {
         /* Selection */
 //            System.out.println("starting selection ...");
@@ -58,8 +58,9 @@ public class Genetic {
         }
         System.out.println("Done !");
         Collections.sort(currentPopulation.getCandidates());
-        Collections.reverse(currentPopulation.getCandidates());
-        fitnessList.add((double) currentPopulation.getCandidates().get(currentPopulation.getCandidates().size() - 1).fitness());
-        keyboardList.add(currentPopulation.getCandidates().get(currentPopulation.getCandidates().size() - 1));
+//        Collections.reverse(currentPopulation.getCandidates());
+        fitnessList.add((double) currentPopulation.getCandidates().get(0).fitness());
+        keyboardList.add(currentPopulation.getCandidates().get(0));
+        System.out.println(currentPopulation.getCandidates().get(0));
     }
 }

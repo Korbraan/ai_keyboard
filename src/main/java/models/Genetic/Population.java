@@ -25,7 +25,7 @@ public class Population {
         List<Candidate> candidates = new ArrayList<>(this.candidates);
         Random random = new Random();
         Collections.sort(candidates);
-        Collections.reverse(candidates);
+//        Collections.reverse(candidates);
         int size = candidates.size();
         for (int i=0;i<candidateNumber-1;i++) {
             int pDomain = size*(size+1)/2;
@@ -73,7 +73,7 @@ public class Population {
         List<Candidate> candidates = new ArrayList<>(this.candidates);
         candidates.addAll(created.getCandidates());
         Collections.sort(candidates);
-        Collections.reverse(candidates);
+//        Collections.reverse(candidates);
         int totalSize = candidates.size();
         candidates = candidates.subList(totalSize-wantedSize, totalSize);
 
