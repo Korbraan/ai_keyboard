@@ -15,9 +15,9 @@ public class Window  extends JFrame implements Observer {
     public Window(Keyboard k){
 
         this.setTitle("Intelligence artificielle");
-        this.setSize(800,200);
+        this.setSize(600,150);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new GridLayout(2,1));
+        this.setLayout(new GridLayout(1,2));
 
         this.setVisible(true);
 

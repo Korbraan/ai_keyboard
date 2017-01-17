@@ -245,4 +245,7 @@ public class Candidate implements Comparable<Candidate> {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+    public double getCost(){
+        return this.cost;
+    }
 }
