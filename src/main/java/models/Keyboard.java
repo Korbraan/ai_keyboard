@@ -238,4 +238,12 @@ public class Keyboard extends java.util.Observable {
     public Letter[][] getKeys() {
         return keys;
     }
+
+    public void setGain(double gain){
+        this.gain=gain;
+    }
+
+    public void setKeys(Letter[][] letters){
+        this.keys=letters;
+    }
 }

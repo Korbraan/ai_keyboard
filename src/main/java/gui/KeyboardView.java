@@ -18,7 +18,7 @@ public class KeyboardView extends JPanel implements Observer  {
     public KeyboardView(Keyboard k){
         this.keyboard =  k;
         this.keyboard.addObserver(this);
-        this.setPreferredSize(new Dimension(800, 600));
+        this.setPreferredSize(new Dimension(800, 310));
         this.repaint();
     }
     public void paintComponent(Graphics g){
