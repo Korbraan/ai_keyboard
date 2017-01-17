@@ -22,33 +22,13 @@ public class TestGenetic {
         data_parser.ParseData();
 
         OccurencesData occurences_data = data_parser.getOccurencesData();
-        occurences_data.replaceOccurenceByRank();
+//        occurences_data.replaceOccurenceByRank();
 
-        for (int i = 0; i<50 ; i++) {
+        for (int i = 0; i<10 ; i++) {
             System.out.println("i = " + i);
-            Genetic genetic = new Genetic(400, 400, 40, 0.1);
+            Genetic genetic = new Genetic(1000, 1000, 200, 0.1);
             genetic.optimizePopulation();
         }
 
-        double[] oldFitnessTab = ArrayUtils.toPrimitive(Genetic.oldFitnessList.toArray(new Double[0]));
-        double[] fitnessTab = ArrayUtils.toPrimitive(Genetic.fitnessList.toArray(new Double[0]));
-        StandardDeviation standardDeviation = new StandardDeviation();
-        Mean meanC = new Mean();
-        double deviation = standardDeviation.evaluate(oldFitnessTab);
-        double mean = meanC.evaluate(oldFitnessTab);
-        System.out.println("lower : " + Collections.min(Genetic.oldFitnessList));
-        System.out.println("deviation : " + deviation + " | mean : " + mean);
-        System.out.println("deviation ~ " + 100*deviation/mean +"%");
-        deviation = standardDeviation.evaluate(fitnessTab);
-        mean = meanC.evaluate(fitnessTab);
-        System.out.println("***** NEW *****");
-        System.out.println("lower : " + Collections.min(Genetic.fitnessList) + " | higher : " + Collections.max(Genetic.fitnessList));
-        System.out.println("deviation : " + deviation + " | mean : " + mean);
-        System.out.println("deviation ~ " + 100*deviation/mean +"%");
-
-        Collections.sort(Genetic.keyboardList);
-
-        System.out.println("Best one (" + Genetic.keyboardList.get(0).fitness() +") :");
-        System.out.println(Genetic.keyboardList.get(0));
     }
 }

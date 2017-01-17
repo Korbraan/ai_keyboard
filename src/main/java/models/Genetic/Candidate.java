@@ -18,7 +18,7 @@ public class Candidate implements Comparable<Candidate> {
 
     private Gene[] genes;
     private List<Gene> availableGenes;
-    private int cost;
+    private double cost;
 
     public Candidate() {
         this.genes = new Gene[26];
@@ -117,7 +117,7 @@ public class Candidate implements Comparable<Candidate> {
             cost += computeGeneCost(genes[i],i);
         }
 
-        this.cost = (int) cost/1000;
+        this.cost = cost/10000000000.0;
     }
 
     public double computeGeneCost(Gene gene, int index) {
@@ -136,7 +136,8 @@ public class Candidate implements Comparable<Candidate> {
         long occurence = occurences[index1][index2];
         if (occurence == 0) return 0;
 
-        return distance * occurence;
+        return occurence/distance;
+//        return distance * occurence;
     }
 
     public double getCoeff() {
@@ -173,7 +174,7 @@ public class Candidate implements Comparable<Candidate> {
         return genes;
     }
 
-    public int fitness() {
+    public double fitness() {
         return cost;
     }
 
@@ -207,9 +208,18 @@ public class Candidate implements Comparable<Candidate> {
         return res;
     }
 
+    public Letter[][] getKeys() {
+        Letter[][] keys = new Letter[4][10];
+        for (int i = 0; i < genes.length; i++) {
+            Gene g = genes[i];
+            keys[g.getX()][g.getY()] = Letter.values()[i];
+        }
+        return keys;
+    }
+
     @Override
     public int compareTo(Candidate o) {
-        return Integer.compare(cost, o.fitness());
+        return Double.compare(cost, o.fitness());
     }
 
     @Override
@@ -227,9 +237,12 @@ public class Candidate implements Comparable<Candidate> {
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(genes);
+        int result;
+        long temp;
+        result = Arrays.hashCode(genes);
         result = 31 * result + (availableGenes != null ? availableGenes.hashCode() : 0);
-        result = 31 * result + cost;
+        temp = Double.doubleToLongBits(cost);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 }
