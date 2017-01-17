@@ -43,4 +43,12 @@ public class KeyboardView extends JPanel implements Observer  {
         this.validate();
         this.repaint();
     }
+
+    public void setKeyboard(Keyboard keyboard) {
+        this.keyboard = keyboard;
+    }
+
+    public Keyboard getKeyboard() {
+        return keyboard;
+    }
 }

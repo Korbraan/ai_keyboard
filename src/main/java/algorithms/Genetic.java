@@ -25,21 +25,21 @@ public class Genetic {
         int[] fitnessvar = new int[generations];
         for (int i = 0; i < generations; i++) {
         /* Selection */
-            System.out.println("starting selection ...");
+//            System.out.println("starting selection ...");
             Population selectedPopulation = currentPopulation.selectByRank(selectionSize);
         /* Crossing */
-            System.out.println("making babies ...");
+//            System.out.println("making babies ...");
             Population childPopulation = selectedPopulation.makeBabies();
         /* Mutations */
-            System.out.println("mutate babies ...");
+//            System.out.println("mutate babies ...");
             for (Candidate child : childPopulation.getCandidates())
                 child.mutate(mutationProbability);
         /* Insertion */
-            System.out.println("Inserting population ...");
+//            System.out.println("Inserting population ...");
             currentPopulation = currentPopulation.newGeneration(childPopulation);
         }
 
-        System.out.println("Done !");
+//        System.out.println("Done !");
         return Collections.max(currentPopulation.getCandidates());
     }
 }

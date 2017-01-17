@@ -19,8 +19,4 @@ public enum Letter {
     public int getValue() {
         return value;
     }
-
-
-
-
 }

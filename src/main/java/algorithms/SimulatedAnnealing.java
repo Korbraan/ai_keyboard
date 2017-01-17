@@ -2,7 +2,6 @@ package algorithms;
 
 
 import models.Keyboard;
-import models.Letter;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,11 +14,19 @@ public class SimulatedAnnealing {
     private double temperatureLimit;
     private Keyboard bestKeyboard;
 
+    public SimulatedAnnealing(double temperature, double coolingRate, double temperatureLimit) {
+        this.temperature = temperature;
+        this.coolingRate = coolingRate;
+        this.temperatureLimit = temperatureLimit;
+        this.bestKeyboard = new Keyboard();
+    }
+
     public SimulatedAnnealing() {
         this.temperature = 10;
         this.coolingRate = 0.9999;
         this.temperatureLimit = 0.01;
         this.bestKeyboard = new Keyboard();
+
     }
 
     public void optimizeKeyboard(Keyboard keyboard) {
@@ -31,7 +38,6 @@ public class SimulatedAnnealing {
 
             if (acceptanceProbability(keyboard.getGain(), neighbourKeyboard.getGain()) > ThreadLocalRandom.current().nextDouble(1)) {
                 keyboard = new Keyboard(neighbourKeyboard);
-                keyboard.getGain();
             }
             if (keyboard.getGain() > bestKeyboard.getGain()) {
                 bestKeyboard = new Keyboard(keyboard);
@@ -45,7 +51,7 @@ public class SimulatedAnnealing {
             return 1;
         }
         double probability = Math.exp((new_energy - old_energy)/temperature);
-//        System.out.println("proba : " + probability);
+
         return probability;
     }
 

@@ -17,7 +17,7 @@ public class DataParser {
         this.data_file = new File(data_file_path);
     }
 
-    public void ParseData() {
+    public void parseData() {
         try {
             long[][] occurences = new long[26][26];
             BufferedReader br = new BufferedReader(new FileReader(data_file));

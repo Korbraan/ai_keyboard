@@ -6,8 +6,6 @@ import models.Keyboard;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,26 +18,29 @@ public class MenuView extends JPanel implements Observer{
 
     private Genetic genetic;
 
-    private JPanel panel_buttons;
-
-    private JPanel panel_field;
-
-    private JPanel panel_field_gen;
-
     public MenuView(Keyboard k){
 
         k.addObserver(this);
 
-        this.panel_buttons=new JPanel();
+        JPanel panel_buttons = new JPanel();
         panel_buttons.setLayout(new GridLayout(2,2));
 
-        this.panel_field=new JPanel();
+        JPanel panel_field = new JPanel();
         panel_field.setLayout(new GridLayout(2,1));
 
-        this.panel_field_gen=new JPanel();
+        JPanel panel_field_gen = new JPanel();
         panel_field_gen.setLayout(new GridLayout(1, 8));
 
-        this.setLayout(new GridLayout(1,2));
+
+        String[] algorithmsNames = new String[]
+                {
+                        "Simulated annealing",
+                        "Genetic"
+                };
+        JComboBox algorithmsList = new JComboBox(algorithmsNames);
+
+
+        this.setLayout(new BorderLayout());
 
         JLabel costLabel = new JLabel();
         String fit = "Fitness : "+(int)k.getGain();
@@ -55,68 +56,59 @@ public class MenuView extends JPanel implements Observer{
         JTextField mutateProbField = new JTextField("0.2");
 
         JButton rec = new JButton("Simulated annealing");
-        rec.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                k.createRandomKeyboard();
-                k.updateGUI();
-                simulatedAnnealing = new SimulatedAnnealing();
-                simulatedAnnealing.optimizeKeyboard(k);
-                k.setKeys(simulatedAnnealing.getBestKeyboard().getKeys());
-                k.setGain(simulatedAnnealing.getBestKeyboard().getGain());
-                System.out.println(k.getGain());
-                String fit = "Fitness : "+(int)k.getGain();
-                costLabel.setText(fit);
-                k.updateGUI();
-            }
+        rec.addActionListener(e -> {
+            k.createRandomKeyboard();
+            k.updateGUI();
+            simulatedAnnealing = new SimulatedAnnealing();
+            simulatedAnnealing.optimizeKeyboard(k);
+            k.setKeys(simulatedAnnealing.getBestKeyboard().getKeys());
+            k.setGain(simulatedAnnealing.getBestKeyboard().getGain());
+//                System.out.println(k.getGain());
+            String fit1 = "Fitness : "+(int)k.getGain();
+            costLabel.setText(fit1);
+            k.updateGUI();
         });
         JButton random = new JButton("Randomize keyboard");
-        random.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                k.createRandomKeyboard();
-                System.out.println(k.getGain());
-                costLabel.setText(Double.toString(k.getGain()));
-                k.computeGain();
-                System.out.println(k.getGain());
-                String fit = "Fitness : "+(int)k.getGain();
-                costLabel.setText(fit);
-                k.updateGUI();
-            }
+        random.addActionListener( e -> {
+            k.createRandomKeyboard();
+//                System.out.println(k.getGain());
+            costLabel.setText(Double.toString(k.getGain()));
+            k.computeGain();
+//                System.out.println(k.getGain());
+            String fit12 = "Fitness : "+(int)k.getGain();
+            costLabel.setText(fit12);
+            k.updateGUI();
         });
         JButton gen = new JButton("Genetic");
-        gen.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                k.setKeys(null);
-                k.createRandomKeyboard();
-                costLabel.setText(Double.toString(k.getGain()));
-                genetic = new Genetic(Integer.parseInt(population_sizefield.getText()), Integer.parseInt(generationsfield.getText()), Integer.parseInt(selectionSizefield.getText()), Double.parseDouble(mutateProbField.getText()));
-                genetic.optimizePopulation();
-                k.setKeys(genetic.optimizePopulation().getKeys());
-                k.setGain(genetic.optimizePopulation().fitness());
-                String fit = "Fitness : "+(int)k.getGain();
-                costLabel.setText(fit);
-                k.updateGUI();
-            }
+        gen.addActionListener( e -> {
+            k.setKeys(null);
+            k.createRandomKeyboard();
+            costLabel.setText(Double.toString(k.getGain()));
+            genetic = new Genetic(Integer.parseInt(population_sizefield.getText()), Integer.parseInt(generationsfield.getText()), Integer.parseInt(selectionSizefield.getText()), Double.parseDouble(mutateProbField.getText()));
+            genetic.optimizePopulation();
+            k.setKeys(genetic.optimizePopulation().getKeys());
+            k.setGain(genetic.optimizePopulation().fitness());
+            String fit13 = "Fitness : "+(int)k.getGain();
+            costLabel.setText(fit13);
+            k.updateGUI();
         });
 
-        this.panel_buttons.add(costLabel);
-        this.panel_buttons.add(gen);
-        this.panel_buttons.add(new JLabel());
-        this.panel_buttons.add(rec);
+        panel_buttons.add(costLabel);
+        panel_buttons.add(gen);
+        panel_buttons.add(new JLabel());
+        panel_buttons.add(rec);
 
-        this.panel_field_gen.add(population_size);
-        this.panel_field_gen.add(population_sizefield);
-        this.panel_field_gen.add(generations);
-        this.panel_field_gen.add(generationsfield);
-        this.panel_field_gen.add(selectionSize);
-        this.panel_field_gen.add(selectionSizefield);
-        this.panel_field_gen.add(mutateProb);
-        this.panel_field_gen.add(mutateProbField);
+        panel_field_gen.add(population_size);
+        panel_field_gen.add(population_sizefield);
+        panel_field_gen.add(generations);
+        panel_field_gen.add(generationsfield);
+        panel_field_gen.add(selectionSize);
+        panel_field_gen.add(selectionSizefield);
+        panel_field_gen.add(mutateProb);
+        panel_field_gen.add(mutateProbField);
 
         this.add(panel_buttons);
-        this.panel_field.add(panel_field_gen);
+        panel_field.add(panel_field_gen);
         this.add(panel_field);
     }
 

@@ -151,30 +151,11 @@ public class Keyboard extends java.util.Observable {
         updateGUI();
     }
 
-//    public void moveLetter(Letter letter) {
-//        Position current_position = this.getLetterPosition(letter);
-//        int index = ThreadLocalRandom.current().nextInt(emptyPos.size());
-//
-//        Position new_position = emptyPos.remove(index);
-//        emptyPos.add(current_position);
-//        keyPos.put(letter, new_position);
-//        keys[current_position.getX()][current_position.getY()] = null;
-//        keys[new_position.getX()][new_position.getY()] = letter;
-//
-//        updateGUI();
-//
-//        computeGain();
-//    }
-
     public void moveLetter(Letter letter) {
         Position initial_position = this.getLetterPosition(letter);
 
         int x = ThreadLocalRandom.current().nextInt(4);
         int y = ThreadLocalRandom.current().nextInt(10);
-        //int index = ThreadLocalRandom.current().nextInt(empty_positions.size());
-
-        //Position new_position = empty_positions.remove(index);
-        //empty_positions.add(initial_position);
 
         Position new_position = new Position(x, y);
 
@@ -221,6 +202,59 @@ public class Keyboard extends java.util.Observable {
         neighbour.moveLetter(alphabet[ThreadLocalRandom.current().nextInt(alphabet.length)]);
 
         return neighbour;
+    }
+
+    public Keyboard getAzerty() {
+        Keyboard k2000 = new Keyboard();
+
+
+        Letter[] azerty = new Letter[]
+                {
+                        Letter.A,
+                        Letter.Z,
+                        Letter.E,
+                        Letter.R,
+                        Letter.T,
+                        Letter.Y,
+                        Letter.U,
+                        Letter.I,
+                        Letter.O,
+                        Letter.P,
+                        Letter.Q,
+                        Letter.S,
+                        Letter.D,
+                        Letter.F,
+                        Letter.G,
+                        Letter.H,
+                        Letter.J,
+                        Letter.K,
+                        Letter.L,
+                        Letter.M,
+                        Letter.W,
+                        Letter.X,
+                        Letter.C,
+                        Letter.V,
+                        Letter.B,
+                        Letter.N
+                };
+        int index = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (index < 26) {
+                    Letter letter = azerty[index];
+                    index++;
+                    Position position = new Position(i, j);
+
+                    k2000.getKeys()[i][j] = letter;
+                    k2000.getKeyPos().put(letter, position);
+                    k2000.getPosKey().put(position, letter);
+                    k2000.getEmptyPos().remove(position);
+                }
+            }
+        }
+        k2000.computeGain();
+
+        return k2000;
     }
 
     public HashMap<Letter, Position> getKeyPos() {
