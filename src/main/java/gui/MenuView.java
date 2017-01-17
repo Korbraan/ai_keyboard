@@ -4,11 +4,9 @@ import algorithms.SimulatedAnnealing;
 import models.Keyboard;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.security.Key;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -36,7 +34,7 @@ public class MenuView extends JPanel implements Observer{
         this.setLayout(new GridLayout(3,1));
 
         JLabel cost = new JLabel();
-        cost.setText(Double.toString(k.getCost()));
+        cost.setText(Double.toString(k.getGain()));
 
         JButton rec = new JButton("Simulated annealing");
         rec.addActionListener(new ActionListener() {
@@ -44,9 +42,9 @@ public class MenuView extends JPanel implements Observer{
             public void actionPerformed(ActionEvent e) {
                 simulatedAnnealing = new SimulatedAnnealing(k);
                 simulatedAnnealing.optimizeKeyboard(k);
-                k.computeCost();
-                System.out.println(k.getCost());
-                cost.setText(Double.toString(k.getCost()));
+                k.computeGain();
+                System.out.println(k.getGain());
+                cost.setText(Double.toString(k.getGain()));
                 k.updateGUI();
             }
         });
@@ -55,8 +53,8 @@ public class MenuView extends JPanel implements Observer{
             @Override
             public void actionPerformed(ActionEvent e) {
                 k.createRandomKeyboard();
-                System.out.println(k.getCost());
-                cost.setText(Double.toString(k.getCost()));
+                System.out.println(k.getGain());
+                cost.setText(Double.toString(k.getGain()));
                 k.updateGUI();
             }
         });

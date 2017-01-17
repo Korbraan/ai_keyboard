@@ -1,12 +1,10 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static models.OccurencesData.getMaxOccurence;
 import static models.OccurencesData.occurences;
 
 /**
@@ -17,13 +15,13 @@ public class Keyboard extends java.util.Observable {
     private Letter[][] keys;
     private HashMap<Letter, Position> keyPos;
     private ArrayList<Position> emptyPos;
-    private HashMap<Letter, Double> lettersCost;
-    private double cost;
+    private HashMap<Letter, Double> lettersGain;
+    private double gain;
 
     public Keyboard() {
         this.keys= new Letter[4][10];
         this.keyPos= new HashMap<Letter, Position>();
-        this.lettersCost = new HashMap<>();
+        this.lettersGain = new HashMap<>();
         this.emptyPos = new ArrayList<>();
         initEmptyPos();
     }
@@ -32,8 +30,8 @@ public class Keyboard extends java.util.Observable {
         this.keys = k.keys;
         this.keyPos = k.keyPos;
         this.emptyPos = k.emptyPos;
-        this.lettersCost = k.lettersCost;
-        this.cost = k.cost;
+        this.lettersGain = k.lettersGain;
+        this.gain = k.gain;
     }
 
     private void initEmptyPos() {
@@ -65,7 +63,7 @@ public class Keyboard extends java.util.Observable {
                 }
             }
         }
-        computeCost();
+        computeGain();
     }
 
     public Letter[][] getKeyboard(){
@@ -83,12 +81,9 @@ public class Keyboard extends java.util.Observable {
      */
     public void setKey(Letter letter, int x, int y) {
         keys[x][y]=letter;
-        //System.out.println(keys[x][y].getValue());
         Position pos = new Position(x, y);
         emptyPos.remove(pos);
         keyPos.put(letter, pos);
-        //this.setChanged();
-        //this.notifyObservers();
     }
 
     public Position getLetterPosition(Letter letter) {
@@ -112,62 +107,43 @@ public class Keyboard extends java.util.Observable {
         return res;
     }
 
-    public double twoLettersCost(Letter l1, Letter l2) {
+    public double twoLettersGain(Letter l1, Letter l2) {
         Position p1 = this.getLetterPosition(l1);
         Position p2 = this.getLetterPosition(l2);
 
         double distance = p1.euclideanDistance(p2);
         long occurence = occurences[l1.getValue()-1][l2.getValue()-1];
 
-        double result = distance * getCoeff() + occurence;
+        double result = occurence/(Math.pow(10,10) * distance);
 
         return result;
     }
 
-    public double getCoeff() {
-        //TODO : Move that to the proper class
-        Position p1 = new Position(0,0);
-        Position p2 = new Position (keys.length,keys[0].length);
-        return getMaxOccurence()/p1.euclideanDistance(p2);
-    }
-
-    public void computeLetterCost(Letter letter) {
-        double letterCost = 0;
+    public void computeLetterGain(Letter letter) {
+        double lettersGain = 0;
 
         for (Letter other : Letter.values()) {
             if (!other.equals(letter)) {
-                letterCost += twoLettersCost(letter, other);
+                lettersGain += twoLettersGain(letter, other);
             }
         }
 
-        this.lettersCost.put(letter, letterCost);
+        this.lettersGain.put(letter, lettersGain);
     }
 
-    public void computeCost() {
-        double cost = 0;
+    public void computeGain() {
+        double gain = 0;
 
         for (Letter letter : Letter.values()) {
-            computeLetterCost(letter);
+            computeLetterGain(letter);
         }
 
-        for (Map.Entry<Letter, Double> entry : lettersCost.entrySet()) {
-            cost += entry.getValue();
+        for (Map.Entry<Letter, Double> entry : lettersGain.entrySet()) {
+            gain += entry.getValue();
         }
 
-        this.cost = cost;
+        this.gain = gain;
         updateGUI();
-    }
-
-    public Letter getWorstLetter() {
-        Map.Entry<Letter, Double> maxEntry = null;
-
-        for (Map.Entry<Letter, Double> entry : lettersCost.entrySet()) {
-            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {
-                maxEntry = entry;
-            }
-        }
-
-        return maxEntry.getKey();
     }
 
     public void moveLetter(Letter letter) {
@@ -182,7 +158,7 @@ public class Keyboard extends java.util.Observable {
 
         updateGUI();
 
-        computeCost();
+        computeGain();
     }
 
     public void updateGUI(){
@@ -190,12 +166,8 @@ public class Keyboard extends java.util.Observable {
         notifyObservers();
     }
 
-    public HashMap<Letter, Double> getLettersCost() {
-        return lettersCost;
-    }
-
-    public double getCost() {
-        return cost;
+    public double getGain() {
+        return gain;
     }
 
 }

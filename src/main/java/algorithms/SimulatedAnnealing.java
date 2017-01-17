@@ -4,59 +4,52 @@ package algorithms;
 import models.Keyboard;
 import models.Letter;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by cremond on 27/12/16.
  */
 public class SimulatedAnnealing {
-    private int n;
     private double temperature;
+    private double temperatureLimit;
+    private double coolingRate;
     private double energy;
 
     public SimulatedAnnealing(Keyboard keyboard) {
-        this.energy = keyboard.getCost();
-        this.n = 1;
-        this.temperature = temperature(n);
+        this.energy = keyboard.getGain();
+        this.temperature = 1000;
+        this.temperatureLimit = 0.01;
+        this.coolingRate = 0.999;
     }
 
     public void optimizeKeyboard(Keyboard k) {
-        while (temperature >= 1) {
+        while (temperature > temperatureLimit) {
             Keyboard nextKeyboard = new Keyboard(k);
-//            Letter letter = keyboard.getWorstLetter();
 
             // Plutôt que de prendre la pire lettre, on prend une lettre au hasard --> sortir des extrema locaux
             Letter[] alphabet = Letter.values();
             Letter letter = alphabet[ThreadLocalRandom.current().nextInt(alphabet.length)];
-            boolean optimized = false;
-            while (!optimized) {
-                nextKeyboard.moveLetter(letter);
-                double nextEnergy = nextKeyboard.getCost();
-                if (nextKeyboard.getCost() < k.getCost() || isLucky(nextEnergy)) {
-                    k = nextKeyboard;
-                    energy = nextEnergy;
-                    n++;
-                    temperature = temperature(n);
-                    optimized = true;
-                    System.out.println("Letter " + letter + " moved");
-                }
+
+            nextKeyboard.moveLetter(letter);
+            double newEnergy = nextKeyboard.getGain();
+
+            if (acceptanceProbability(energy, newEnergy) > ThreadLocalRandom.current().nextDouble(1)) {
+                k = nextKeyboard;
+
+//                System.out.println("Letter " + letter + " moved");
             }
+            temperature *= coolingRate;
         }
     }
 
+    public double acceptanceProbability(double old_energy, double new_energy) {
+        if (old_energy < new_energy) {
+            return 1;
+        }
+        double proba = Math.exp((new_energy - old_energy) / temperature);
 
-    public boolean isLucky(double energy) {
-            Random r = new Random();
-        double p = r.nextDouble();
-        return p <= Math.exp(-(energy-this.energy)/temperature);
+        System.out.println("proba : " + proba);
+
+        return proba;
     }
-
-    public double temperature(int n) {
-        //TODO : Implement a temperature function
-        return 100/n;
-    }
-
-
-
 }

@@ -30,9 +30,9 @@ public class Main {
 
         Window window = new Window(k);
 
-        //k.createRandomKeyboard();
-        System.out.println("Tableau de lettres random");
-        System.out.println(k.toString());
+//        k.createRandomKeyboard();
+//        System.out.println("Tableau de lettres random");
+//        System.out.println(k.toString());
 
        // System.out.println(simulatedAnnealing.getKeyboard().toString());
 
