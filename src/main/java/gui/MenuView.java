@@ -40,7 +40,7 @@ public class MenuView extends JPanel implements Observer{
         rec.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                simulatedAnnealing = new SimulatedAnnealing(k);
+                simulatedAnnealing = new SimulatedAnnealing();
                 simulatedAnnealing.optimizeKeyboard(k);
                 k.computeGain();
                 System.out.println(k.getGain());

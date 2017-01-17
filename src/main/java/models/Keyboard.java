@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,10 +30,14 @@ public class Keyboard extends java.util.Observable {
     }
 
     public Keyboard(Keyboard k) {
-        this.keys = k.keys;
-        this.keyPos = k.keyPos;
-        this.emptyPos = k.emptyPos;
-        this.lettersGain = k.lettersGain;
+        this.keys = new Letter[4][10];
+        for (int i = 0; i < k.keys.length; i++) {
+            this.keys[i] = Arrays.copyOf(k.keys[i], this.keys[i].length);
+        }
+        this.keyPos = new HashMap<>(k.keyPos);
+        this.posKey = new HashMap<>(k.posKey);
+        this.emptyPos = new ArrayList<>(k.emptyPos);
+        this.lettersGain = new HashMap<>(k.lettersGain);
         this.gain = k.gain;
     }
 
@@ -70,9 +75,6 @@ public class Keyboard extends java.util.Observable {
 
     public Letter[][] getKeyboard(){
         return this.keys;
-    }
-    public Position getPosByKey(Letter al){
-        return keyPos.get(al);
     }
 
     /**
@@ -117,7 +119,7 @@ public class Keyboard extends java.util.Observable {
         double distance = p1.euclideanDistance(p2);
         long occurence = occurences[l1.getValue()-1][l2.getValue()-1];
 
-        double result = occurence/(Math.pow(10,10) * distance);
+        double result = occurence/distance;
 
         return result;
     }
@@ -126,7 +128,7 @@ public class Keyboard extends java.util.Observable {
         double lettersGain = 0;
 
         for (Letter other : Letter.values()) {
-            if (!other.equals(letter)) {
+            if (letter.getValue() != other.getValue()) {
                 lettersGain += twoLettersGain(letter, other);
             }
         }
@@ -145,7 +147,7 @@ public class Keyboard extends java.util.Observable {
             gain += entry.getValue();
         }
 
-        this.gain = gain;
+        this.gain = gain/Math.pow(10,10);
         updateGUI();
     }
 
@@ -165,7 +167,6 @@ public class Keyboard extends java.util.Observable {
 //    }
 
     public void moveLetter(Letter letter) {
-        // TODO en fait ce serait mieux de pouvoir swap deux lettres car le résultat sera un paquet condensé de lettres
         Position initial_position = this.getLetterPosition(letter);
 
         int x = ThreadLocalRandom.current().nextInt(4);
@@ -201,10 +202,8 @@ public class Keyboard extends java.util.Observable {
             keys[initial_position.getX()][initial_position.getY()] = letter_to_swap;
             keys[new_position.getX()][new_position.getY()] = letter;
         }
-
-        computeGain();
-
         updateGUI();
+        computeGain();
     }
 
     public void updateGUI(){
@@ -216,4 +215,27 @@ public class Keyboard extends java.util.Observable {
         return gain;
     }
 
+    public Keyboard getNeighbour() {
+        Keyboard neighbour = new Keyboard(this);
+        Letter[] alphabet = Letter.values();
+        neighbour.moveLetter(alphabet[ThreadLocalRandom.current().nextInt(alphabet.length)]);
+
+        return neighbour;
+    }
+
+    public HashMap<Letter, Position> getKeyPos() {
+        return keyPos;
+    }
+
+    public HashMap<Position, Letter> getPosKey() {
+        return posKey;
+    }
+
+    public ArrayList<Position> getEmptyPos() {
+        return emptyPos;
+    }
+
+    public Letter[][] getKeys() {
+        return keys;
+    }
 }

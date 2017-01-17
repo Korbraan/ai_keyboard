@@ -11,45 +11,45 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class SimulatedAnnealing {
     private double temperature;
-    private double temperatureLimit;
     private double coolingRate;
-    private double energy;
+    private double temperatureLimit;
+    private Keyboard bestKeyboard;
 
-    public SimulatedAnnealing(Keyboard keyboard) {
-        this.energy = keyboard.getGain();
-        this.temperature = 1000;
+    public SimulatedAnnealing() {
+        this.temperature = 10;
+        this.coolingRate = 0.9999;
         this.temperatureLimit = 0.01;
-        this.coolingRate = 0.99;
+        this.bestKeyboard = new Keyboard();
     }
 
-    public void optimizeKeyboard(Keyboard k) {
+    public void optimizeKeyboard(Keyboard keyboard) {
+        Keyboard neighbourKeyboard;
+
         while (temperature > temperatureLimit) {
-            Keyboard nextKeyboard = new Keyboard(k);
 
-            // Plutôt que de prendre la pire lettre, on prend une lettre au hasard --> sortir des extrema locaux
-            Letter[] alphabet = Letter.values();
-            Letter letter = alphabet[ThreadLocalRandom.current().nextInt(alphabet.length)];
+            neighbourKeyboard = keyboard.getNeighbour();
 
-            nextKeyboard.moveLetter(letter);
-            double newEnergy = nextKeyboard.getGain();
-
-            if (acceptanceProbability(energy, newEnergy) > ThreadLocalRandom.current().nextDouble(1)) {
-                k = nextKeyboard;
-
-//                System.out.println("Letter " + letter + " moved");
+            if (acceptanceProbability(keyboard.getGain(), neighbourKeyboard.getGain()) > ThreadLocalRandom.current().nextDouble(1)) {
+                keyboard = new Keyboard(neighbourKeyboard);
+                keyboard.getGain();
+            }
+            if (keyboard.getGain() > bestKeyboard.getGain()) {
+                bestKeyboard = new Keyboard(keyboard);
             }
             temperature *= coolingRate;
         }
     }
 
     public double acceptanceProbability(double old_energy, double new_energy) {
-        if (old_energy < new_energy) {
+        if (new_energy > old_energy) {
             return 1;
         }
-        double proba = Math.exp((new_energy - old_energy) / temperature);
+        double probability = Math.exp((new_energy - old_energy)/temperature);
+//        System.out.println("proba : " + probability);
+        return probability;
+    }
 
-        System.out.println("proba : " + proba);
-
-        return proba;
+    public Keyboard getBestKeyboard() {
+        return bestKeyboard;
     }
 }
