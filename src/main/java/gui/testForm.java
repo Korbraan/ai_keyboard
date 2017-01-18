@@ -2,6 +2,7 @@ package gui;
 
 import algorithms.Genetic;
 import algorithms.SimulatedAnnealing;
+import algorithms.TabuSearch;
 import models.Genetic.Candidate;
 import models.Keyboard;
 import tools.DataParser;
@@ -40,6 +41,11 @@ public class testForm {
     private JTextField azertyKeyboardGainField;
     private JTextField qwertyKeyboardGainField;
     private JLabel azertyKeyboardGainPanel;
+    private JPanel tabuSearchFields;
+    private JLabel iterationNumberLabel;
+    private JTextField iterationNumberField;
+    private JTextField neighbourhoodSizeField;
+    private JLabel neighbourhoodSizeLabel;
     private JButton selectDataFileButton;
     private JFileChooser fileChooser;
 
@@ -59,10 +65,18 @@ public class testForm {
                 case "Simulated Annealing":
                     simulatedAnnealingFields.setVisible(true);
                     geneticFields.setVisible(false);
+                    tabuSearchFields.setVisible(false);
                     break;
                 case "Genetic":
                     simulatedAnnealingFields.setVisible(false);
                     geneticFields.setVisible(true);
+                    tabuSearchFields.setVisible(false);
+                    break;
+                case "Tabu Search":
+                    simulatedAnnealingFields.setVisible(false);
+                    geneticFields.setVisible(false);
+                    tabuSearchFields.setVisible(true);
+
                     break;
                 default:
                     System.out.println("Error in item selection");
@@ -95,9 +109,14 @@ public class testForm {
                     k.setKeys(op.getKeys());
                     k.setGain(op.fitness());
                     keyboardView.setKeyboard(k);
-                    gainField.setText(Double.toString(k.getGain()));
-                    keyboardView.revalidate();
-                    keyboardView.repaint();
+                    break;
+                case "Tabu Search":
+                    k.createRandomKeyboard();
+                    TabuSearch tabuSearch = new TabuSearch(Integer.parseInt(iterationNumberField.getText()),
+                            Integer.parseInt(neighbourhoodSizeField.getText()));
+
+                    tabuSearch.optimizeKeyboard(k);
+                    keyboardView.setKeyboard(tabuSearch.getBestKeyboard());
                     break;
                 default:
                     System.out.println("Error in item selection");
@@ -112,6 +131,9 @@ public class testForm {
     private void createUIComponents() {
         simulatedAnnealingFields = new JPanel();
         simulatedAnnealingFields.setVisible(false);
+
+        tabuSearchFields = new JPanel();
+        tabuSearchFields.setVisible(false);
 
         Keyboard k = new Keyboard();
         keyboardView = new KeyboardView(k);

@@ -13,6 +13,14 @@ public class TabuSearch {
     private int iterationsNumber;
     private Keyboard bestKeyboard;
 
+    public TabuSearch(int iterationsNumber, int neighbourhoodSize) {
+
+        this.memory = new ArrayList<>();
+        this.bestKeyboard = new Keyboard();
+        this.neighbourhoodSize = neighbourhoodSize;
+        this.iterationsNumber = iterationsNumber;
+    }
+
     public TabuSearch() {
 
         this.memory = new ArrayList<>();
