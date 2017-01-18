@@ -280,4 +280,20 @@ public class Keyboard extends java.util.Observable {
     public void setKeys(Letter[][] letters){
         this.keys=letters;
     }
+
+    @Override
+    public int hashCode() {
+        return keyPos.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Keyboard) {
+            Keyboard other = (Keyboard) o;
+            if (this.keyPos.equals(other.getKeyPos())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
